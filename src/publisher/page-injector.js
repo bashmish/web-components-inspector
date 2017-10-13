@@ -1,14 +1,14 @@
 /* global chrome */
-// based on https://stackoverflow.com/a/9517879
 
-function loadScript(path, cb) {
+[
+  'node_modules/rempl/dist/rempl.js',
+  'src/publisher/index.js',
+].forEach((path) => {
   const script = document.createElement('script');
   script.src = chrome.extension.getURL(path);
+  script.async = false;
   script.onload = () => {
     script.remove();
-    if (cb) { cb(); }
   };
   (document.head || document.documentElement).appendChild(script);
-}
-
-loadScript('node_modules/rempl/dist/rempl.js', () => loadScript('src/publisher/index.js'));
+});
