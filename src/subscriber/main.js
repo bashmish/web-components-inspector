@@ -9,9 +9,24 @@ Vue.config.productionTip = false;
 
 Vue.use(VueHighlightJS);
 
+const style = document.createElement('style');
+style.textContent = `
+body {
+  margin: 0;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+`;
+document.head.appendChild(style);
+
+const appPlaceholder = document.createElement('div');
+document.body.appendChild(appPlaceholder);
+
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
+  el: appPlaceholder,
   template: '<App/>',
   components: { App },
 });

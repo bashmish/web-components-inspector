@@ -7,7 +7,7 @@ module.exports = {
     sourceMap: isProduction
       ? config.build.productionSourceMap
       : config.dev.cssSourceMap,
-    extract: isProduction
+    extract: false // disabled to have self-contained bundle
   }),
   transformToRequire: {
     video: 'src',

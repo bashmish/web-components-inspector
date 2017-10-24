@@ -1,8 +1,12 @@
-/* global rempl */
 /* eslint no-use-before-define: 0 */
 
-const publisher = rempl.createPublisher('Web Components',
-  (settings, callback) => callback(null, 'url', 'http://localhost:8080'));
+import rempl from 'rempl/dist/rempl';
+
+const publisherName = 'Web Components';
+
+const publisher = process.env.NODE_ENV === 'production' ?
+  rempl.createPublisher(publisherName, rempl.scriptFromFile(window.REMPL_SUBSCRIBER_URL)) :
+  rempl.createPublisher(publisherName, (settings, callback) => callback(null, 'url', 'http://localhost:8080/?preventInfiniteLoop=true'));
 
 publisher.provide('startInspecting', () => {
   document.addEventListener('mousemove', onMousemove);

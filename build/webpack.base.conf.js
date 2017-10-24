@@ -9,7 +9,8 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    app: './src/subscriber/main.js'
+    publisher: './src/publisher/main.js',
+    subscriber: './src/subscriber/main.js',
   },
   output: {
     path: config.build.assetsRoot,

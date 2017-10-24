@@ -9,9 +9,9 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["src/publisher/page-injector.js"],
+      "js": ["page-injector.js"],
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": ["node_modules/rempl/dist/rempl.js", "src/publisher/index.js"]
+  "web_accessible_resources": ["publisher.js", "subscriber.js"]
 }
