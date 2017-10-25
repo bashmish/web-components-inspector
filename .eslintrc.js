@@ -24,11 +24,13 @@ module.exports = {
   },
   // add your custom rules here
   'rules': {
+    'no-use-before-define': 0,
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
       'js': 'never',
       'vue': 'never'
     }],
+    'import/prefer-default-export': 0,
     // allow optionalDependencies
     'import/no-extraneous-dependencies': ['error', {
       'optionalDependencies': ['test/unit/index.js']

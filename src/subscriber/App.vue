@@ -7,7 +7,7 @@
 <script>
 import rempl from 'rempl/dist/rempl';
 
-import Dashboard from '@/components/Dashboard';
+import Dashboard from '@/subscriber/components/Dashboard';
 
 export default {
   name: 'app',
