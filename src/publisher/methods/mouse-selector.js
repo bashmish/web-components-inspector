@@ -1,8 +1,10 @@
 import { serializer } from '@/publisher/serializer';
+import { highlightElement } from '@/publisher/ui';
 import { isCustomElement, listenToClickDisablingOthers } from '@/publisher/utils';
 
 export function initializeMethodsForMouseSelector(publisher) {
   let undoListenToClickDisablingOthers;
+  let removeHighlighter;
 
   publisher.provide('startInspecting', () => {
     document.addEventListener('mousemove', onMousemove);
@@ -12,13 +14,19 @@ export function initializeMethodsForMouseSelector(publisher) {
     document.removeEventListener('mousemove', onMousemove);
     if (undoListenToClickDisablingOthers) {
       undoListenToClickDisablingOthers();
+      removeHighlighter();
     }
   });
 
   let prevComponentName = '';
   function onMousemove(event) {
-    const element = getCustomElementFromEvent(event);
-    const componentName = element ? element.tagName : '';
+    const customElement = getCustomElementFromEvent(event);
+    const componentName = customElement ? customElement.tagName : '';
+
+    if (customElement) {
+      removeHighlighter = highlightElement(customElement);
+    }
+
     if (componentName !== prevComponentName) {
       publisher.callRemote('lookAtElement', componentName);
       prevComponentName = componentName;
