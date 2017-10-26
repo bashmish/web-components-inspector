@@ -1,3 +1,7 @@
-export function isCustomElement(element) {
-  return element instanceof HTMLElement && !!window.customElements.get(element.constructor.is);
-}
+import { isCustomElement } from './custom-element';
+import { listenToClickDisablingOthers } from './mouse';
+
+export {
+  isCustomElement,
+  listenToClickDisablingOthers,
+};

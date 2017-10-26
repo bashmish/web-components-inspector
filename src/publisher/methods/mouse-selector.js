@@ -1,15 +1,18 @@
 import { serializer } from '@/publisher/serializer';
-import { isCustomElement } from '@/publisher/utils';
+import { isCustomElement, listenToClickDisablingOthers } from '@/publisher/utils';
 
 export function initializeMethodsForMouseSelector(publisher) {
+  let undoListenToClickDisablingOthers;
+
   publisher.provide('startInspecting', () => {
     document.addEventListener('mousemove', onMousemove);
-    document.addEventListener('click', onClick);
   });
 
   publisher.provide('stopInspecting', () => {
     document.removeEventListener('mousemove', onMousemove);
-    document.removeEventListener('click', onClick);
+    if (undoListenToClickDisablingOthers) {
+      undoListenToClickDisablingOthers();
+    }
   });
 
   let prevComponentName = '';
@@ -19,6 +22,11 @@ export function initializeMethodsForMouseSelector(publisher) {
     if (componentName !== prevComponentName) {
       publisher.callRemote('lookAtElement', componentName);
       prevComponentName = componentName;
+
+      if (undoListenToClickDisablingOthers) {
+        undoListenToClickDisablingOthers();
+      }
+      undoListenToClickDisablingOthers = listenToClickDisablingOthers(event.target, onClick);
     }
   }
 
@@ -28,7 +36,6 @@ export function initializeMethodsForMouseSelector(publisher) {
       const domString = serializer.getComposedDOMString(element);
       publisher.callRemote('inspectElement', element.tagName, domString);
     }
-    return false;
   }
 
   function getCustomElementFromEvent(event) {
