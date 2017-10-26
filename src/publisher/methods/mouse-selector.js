@@ -71,6 +71,8 @@ export function initializeMethodsForMouseSelector(publisher) {
   function getFirstCustomElementInChain(element) {
     if (isCustomElement(element)) {
       return element;
+    } else if (element.parentElement) {
+      return getFirstCustomElementInChain(element.parentElement);
     } else if (element.getRootNode && element.getRootNode().host) {
       return getFirstCustomElementInChain(element.getRootNode().host);
     }
