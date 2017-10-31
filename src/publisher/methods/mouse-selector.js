@@ -1,6 +1,6 @@
 import { serializer } from '@/publisher/serializer';
 import { highlightElement } from '@/publisher/ui';
-import { isCustomElement, listenToClickDisablingOthers } from '@/publisher/utils';
+import { isCustomElement, getOpenInEditorLink, listenToClickDisablingOthers } from '@/publisher/utils';
 
 export function initializeMethodsForMouseSelector(publisher) {
   let undoListenToClickDisablingOthers;
@@ -21,7 +21,7 @@ export function initializeMethodsForMouseSelector(publisher) {
   let prevComponentName = '';
   function onMousemove(event) {
     const customElement = getCustomElementFromEvent(event);
-    const componentName = customElement ? customElement.tagName : '';
+    const componentName = customElement ? customElement.tagName.toLowerCase() : '';
 
     if (customElement) {
       removeHighlighter = highlightElement(customElement);
@@ -42,7 +42,8 @@ export function initializeMethodsForMouseSelector(publisher) {
     const element = getCustomElementFromEvent(event);
     if (element) {
       const domString = serializer.getComposedDOMString(element);
-      publisher.callRemote('inspectElement', element.tagName, domString);
+      const openInEditorLink = getOpenInEditorLink(element);
+      publisher.callRemote('inspectElement', element.tagName.toLowerCase(), domString, openInEditorLink);
     }
   }
 

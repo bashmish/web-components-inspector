@@ -13,7 +13,10 @@
     </div>
 
     <div class="inspected-component" v-if="composedDOMString">
-      <div>Selected component: {{ componentName }}</div>
+      <div>
+        Selected component: {{ componentName }}
+        <button v-if="componentOpenInEditorLink" v-on:click="openInEditor()">Open in editor</button>
+      </div>
       <h2>Composed DOM:</h2>
       <pre v-highlightjs="composedDOMString"><code class="html"></code></pre>
     </div>
@@ -33,6 +36,7 @@ export default {
     return {
       inspecting: false,
       componentName: '',
+      componentOpenInEditorLink: '',
       composedDOMString: '',
     };
   },
@@ -52,6 +56,10 @@ export default {
       this.inspecting = !this.inspecting;
     },
 
+    openInEditor() {
+      fetch(this.componentOpenInEditorLink);
+    },
+
     provideInspectorMethods() {
       const vue = this;
 
@@ -61,10 +69,11 @@ export default {
           vue.componentName = componentName;
         },
 
-        inspectElement(componentName, composedDOMString) {
+        inspectElement(componentName, composedDOMString, componentOpenInEditorLink) {
           vue.toggleInspecting();
           vue.componentName = componentName;
           vue.composedDOMString = prettyPrint(composedDOMString, { max_char: 500, indent_size: 2 });
+          vue.componentOpenInEditorLink = componentOpenInEditorLink;
         },
 
       });
