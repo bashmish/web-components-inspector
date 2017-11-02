@@ -15,27 +15,27 @@ export function initializeMethodsForMouseSelector(publisher) {
     document.removeEventListener('mousemove', onMousemove);
     if (undoListenToClickDisablingOthers) {
       undoListenToClickDisablingOthers();
+    }
+    if (removeHighlighter) {
       removeHighlighter();
     }
   });
 
-  let prevName = '';
+  let prevCustomElement;
   function onMousemove(event) {
     const customElement = getDeepestCustomElementUnderMousePointer(event);
-    const name = customElement ? customElement.tagName.toLowerCase() : '';
 
-    if (customElement) {
-      removeHighlighter = highlightElement(customElement);
-    }
-
-    if (name !== prevName) {
+    if (customElement && customElement !== prevCustomElement) {
+      const name = customElement.tagName.toLowerCase();
       publisher.callRemote('hoverComponent', name);
-      prevName = name;
 
-      if (undoListenToClickDisablingOthers) {
-        undoListenToClickDisablingOthers();
-      }
+      if (undoListenToClickDisablingOthers) { undoListenToClickDisablingOthers(); }
       undoListenToClickDisablingOthers = listenToClickDisablingOthers(event.target, onClick);
+
+      if (removeHighlighter) { removeHighlighter(); }
+      removeHighlighter = highlightElement(customElement);
+
+      prevCustomElement = customElement;
     }
   }
 
