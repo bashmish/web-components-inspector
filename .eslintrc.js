@@ -24,6 +24,7 @@ module.exports = {
   },
   // add your custom rules here
   'rules': {
+    'max-len': ['error', 120],
     'no-use-before-define': 0,
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {

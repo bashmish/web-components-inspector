@@ -28,7 +28,7 @@ export function initializeMethodsForMouseSelector(publisher) {
     }
 
     if (componentName !== prevComponentName) {
-      publisher.callRemote('lookAtElement', componentName);
+      publisher.callRemote('hoverComponent', componentName);
       prevComponentName = componentName;
 
       if (undoListenToClickDisablingOthers) {
@@ -41,9 +41,10 @@ export function initializeMethodsForMouseSelector(publisher) {
   function onClick(event) {
     const element = getCustomElementFromEvent(event);
     if (element) {
-      const domString = serializer.getComposedDOMString(element);
+      const name = element.tagName.toLowerCase();
+      const composedDOMString = serializer.getComposedDOMString(element);
       const openInEditorLink = getOpenInEditorLink(element);
-      publisher.callRemote('inspectElement', element.tagName.toLowerCase(), domString, openInEditorLink);
+      publisher.callRemote('selectComponent', name, composedDOMString, openInEditorLink);
     }
   }
 

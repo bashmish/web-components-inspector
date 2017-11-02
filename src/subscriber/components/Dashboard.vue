@@ -7,18 +7,18 @@
         inspecting</button>
     </div>
 
-    <div class="lookup-component" v-if="inspecting">
-      Lookup component: {{ componentName }}
-      <span v-if="!componentName">Hover over component and click if interested...</span>
+    <div class="hovered-component" v-if="inspecting">
+      Hovered component: {{ hoveredComponentName }}
+      <span v-if="!hoveredComponentName">Hover over component and click if interested...</span>
     </div>
 
-    <div class="inspected-component" v-if="composedDOMString">
+    <div class="selected-component" v-if="!inspecting && selectedComponentName">
       <div>
-        Selected component: {{ componentName }}
-        <button v-if="componentOpenInEditorLink" v-on:click="openInEditor()">Open in editor</button>
+        Selected component: {{ selectedComponentName }}
+        <button v-if="selectedComponentOpenInEditorLink" v-on:click="openInEditor()">Open in editor</button>
       </div>
       <h2>Composed DOM:</h2>
-      <pre v-highlightjs="composedDOMString"><code class="html"></code></pre>
+      <pre v-highlightjs="selectedComponentComposedDOMString"><code class="html"></code></pre>
     </div>
 
   </div>
@@ -35,9 +35,10 @@ export default {
   data() {
     return {
       inspecting: false,
-      componentName: '',
-      componentOpenInEditorLink: '',
-      composedDOMString: '',
+      hoveredComponentName: '',
+      selectedComponentName: '',
+      selectedComponentComposedDOMString: '',
+      selectedComponentOpenInEditorLink: '',
     };
   },
 
@@ -48,8 +49,6 @@ export default {
         this.api.callRemote('stopInspecting');
         this.revokeInspectorMethods();
       } else {
-        this.componentName = '';
-        this.composedDOMString = '';
         this.api.callRemote('startInspecting');
         this.provideInspectorMethods();
       }
@@ -57,7 +56,7 @@ export default {
     },
 
     openInEditor() {
-      fetch(this.componentOpenInEditorLink);
+      fetch(this.selectedComponentOpenInEditorLink);
     },
 
     provideInspectorMethods() {
@@ -65,22 +64,22 @@ export default {
 
       this.api.provide({
 
-        lookAtElement(componentName) {
-          vue.componentName = componentName;
+        hoverComponent(name) {
+          vue.hoveredComponentName = name;
         },
 
-        inspectElement(componentName, composedDOMString, componentOpenInEditorLink) {
+        selectComponent(name, composedDOMString, openInEditorLink) {
           vue.toggleInspecting();
-          vue.componentName = componentName;
-          vue.composedDOMString = prettyPrint(composedDOMString, { max_char: 500, indent_size: 2 });
-          vue.componentOpenInEditorLink = componentOpenInEditorLink;
+          vue.selectedComponentName = name;
+          vue.selectedComponentComposedDOMString = prettyPrint(composedDOMString, { max_char: 500, indent_size: 2 });
+          vue.selectedComponentOpenInEditorLink = openInEditorLink;
         },
 
       });
     },
 
     revokeInspectorMethods() {
-      this.api.revoke(['lookAtElement', 'inspectElement']);
+      this.api.revoke(['hoverComponent', 'selectComponent']);
     },
 
   },
@@ -101,24 +100,24 @@ export default {
     flex-grow: 0;
   }
 
-  .lookup-component {
+  .hovered-component {
     flex-grow: 0;
   }
 
-  .inspected-component {
+  .selected-component {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
   }
 
-  .inspected-component div,
-  .inspected-component h2 {
+  .selected-component div,
+  .selected-component h2 {
     flex-grow: 0;
     margin: 0;
     padding: 0;
   }
 
-  .inspected-component pre {
+  .selected-component pre {
     flex-grow: 1;
     width: 100%;
     margin: 0;
