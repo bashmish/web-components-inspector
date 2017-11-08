@@ -1,5 +1,5 @@
 export function isCustomElement(element) {
-  return element instanceof HTMLElement && !!window.customElements.get(element.constructor.is);
+  return element instanceof HTMLElement && !!window.customElements.get(element.nodeName.toLowerCase());
 }
 
 export function getDeepestElementAtPoint(clientX, clientY, shadowRoot = document) {
