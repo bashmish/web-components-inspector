@@ -16,7 +16,12 @@ export function serializeElement(element) {
   for (let i = 0; i < elementOrShadowRoot.childNodes.length; i += 1) {
     const node = elementOrShadowRoot.childNodes[i];
 
-    if (node.nodeName === 'SLOT') {
+    if (node.nodeName === 'CONTENT') {
+      const contentNodes = node.getDistributedNodes();
+      contentNodes.forEach((contentNode) => {
+        children.push(serializeNode(contentNode));
+      });
+    } else if (node.nodeName === 'SLOT') {
       const slotNodes = node.assignedNodes({ flatten: true });
       slotNodes.forEach((slotNode) => {
         children.push(serializeNode(slotNode));

@@ -1,5 +1,9 @@
 export function isCustomElement(element) {
-  return element instanceof HTMLElement && !!window.customElements.get(element.nodeName.toLowerCase());
+  // TODO: rename to isRegisteredCustomElement
+  // so far the most generic check I found for both v0 and v1 specs
+  return element instanceof HTMLElement && // indeed an element
+    element.nodeName.indexOf('-') !== -1 && // name contains a dash
+    element.constructor !== HTMLElement; // not just a dummy unregistered/undefined element
 }
 
 export function getDeepestElementAtPoint(clientX, clientY, shadowRoot = document) {
