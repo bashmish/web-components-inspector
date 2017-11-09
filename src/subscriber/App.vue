@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Dashboard v-if="connected" :api="api"/>
+    <dashboard v-if="connected" :api="api"></dashboard>
   </div>
 </template>
 

@@ -1,7 +1,6 @@
-import { serializer } from '@/publisher/serializer';
 import { highlightElement } from '@/publisher/ui';
-import { getDeepestCustomElementUnderMousePointer, listenToClickDisablingOthers,
-  getOpenInEditorLink } from '@/publisher/utils';
+import { getDeepestCustomElementUnderMousePointer, listenToClickDisablingOthers } from '@/publisher/utils';
+import { selectComponent } from './shared';
 
 export function initializeMethodsForMouseSelector(publisher) {
   let undoListenToClickDisablingOthers;
@@ -40,12 +39,9 @@ export function initializeMethodsForMouseSelector(publisher) {
   }
 
   function onClick(event) {
-    const customElement = getDeepestCustomElementUnderMousePointer(event);
-    if (customElement) {
-      const name = customElement.tagName.toLowerCase();
-      const composedDOMString = serializer.getComposedDOMString(customElement);
-      const openInEditorLink = getOpenInEditorLink(customElement);
-      publisher.callRemote('selectComponent', name, composedDOMString, openInEditorLink);
+    const element = getDeepestCustomElementUnderMousePointer(event);
+    if (element) {
+      selectComponent(publisher, element);
     }
   }
 }

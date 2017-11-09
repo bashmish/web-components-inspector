@@ -18,14 +18,14 @@
         <button v-if="selectedComponentOpenInEditorLink" v-on:click="openInEditor()">Open in editor</button>
       </div>
       <h2>Composed DOM:</h2>
-      <pre v-highlightjs="selectedComponentComposedDOMString"><code class="html"></code></pre>
+      <dom-component :api="api" :component="selectedComponentComposedDOM"></dom-component>
     </div>
 
   </div>
 </template>
 
 <script>
-import { prettyPrint } from 'html';
+import DomComponent from '@/subscriber/components/DomComponent';
 
 export default {
   name: 'dashboard',
@@ -37,57 +37,78 @@ export default {
       inspecting: false,
       hoveredComponentName: '',
       selectedComponentName: '',
-      selectedComponentComposedDOMString: '',
+      selectedComponentComposedDOM: {},
       selectedComponentOpenInEditorLink: '',
     };
+  },
+
+  components: {
+    DomComponent,
+  },
+
+  mounted() {
+    this.provideSelectingMethods();
   },
 
   methods: {
 
     toggleInspecting() {
       if (this.inspecting) {
-        this.api.callRemote('stopInspecting');
-        this.revokeInspectorMethods();
+        this.stopInspecting();
       } else {
-        this.api.callRemote('startInspecting');
-        this.provideInspectorMethods();
+        this.startInspecting();
       }
-      this.inspecting = !this.inspecting;
+    },
+
+    startInspecting() {
+      this.api.callRemote('startInspecting');
+      this.provideInspectingMethods();
+      this.inspecting = true;
+    },
+
+    stopInspecting() {
+      this.api.callRemote('stopInspecting');
+      this.revokeInspectingMethods();
+      this.inspecting = false;
     },
 
     openInEditor() {
       fetch(this.selectedComponentOpenInEditorLink);
     },
 
-    provideInspectorMethods() {
+    selectComponent(component) {
+      this.api.callRemote('selectComponent', component.selector);
+    },
+
+    provideSelectingMethods() {
       const vue = this;
-
       this.api.provide({
-
-        hoverComponent(name) {
-          vue.hoveredComponentName = name;
-        },
-
-        selectComponent(name, composedDOMString, openInEditorLink) {
-          vue.toggleInspecting();
+        selectComponent(name, composedDOM, openInEditorLink) {
+          vue.stopInspecting();
           vue.selectedComponentName = name;
-          vue.selectedComponentComposedDOMString = prettyPrint(composedDOMString, { max_char: 500, indent_size: 2 });
+          vue.selectedComponentComposedDOM = composedDOM;
           vue.selectedComponentOpenInEditorLink = openInEditorLink;
         },
-
       });
     },
 
-    revokeInspectorMethods() {
-      this.api.revoke(['hoverComponent', 'selectComponent']);
+    provideInspectingMethods() {
+      const vue = this;
+      this.api.provide({
+        hoverComponent(name) {
+          vue.hoveredComponentName = name;
+        },
+      });
+    },
+
+    revokeInspectingMethods() {
+      this.api.revoke(['hoverComponent']);
     },
 
   },
 
 };
 </script>
-
-<style src="highlight.js/styles/vs.css"></style>
 
 <style scoped>
   #dashboard {
@@ -117,10 +138,9 @@ export default {
     padding: 0;
   }
 
-  .selected-component pre {
+  .selected-component DomTree {
     flex-grow: 1;
     width: 100%;
-    margin: 0;
     overflow: scroll;
   }
 </style>

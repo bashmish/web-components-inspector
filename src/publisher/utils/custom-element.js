@@ -15,13 +15,13 @@ export function getDeepestElementAtPoint(clientX, clientY, shadowRoot = document
   return element;
 }
 
-export function getClosestParentCustomElement(element) {
-  if (isCustomElement(element)) {
+export function getClosestParentCustomElement(element, selfCheck = false) {
+  if (selfCheck && isCustomElement(element)) {
     return element;
   } else if (element.parentElement) {
-    return getClosestParentCustomElement(element.parentElement);
+    return getClosestParentCustomElement(element.parentElement, true);
   } else if (element.getRootNode && element.getRootNode().host) {
-    return getClosestParentCustomElement(element.getRootNode().host);
+    return getClosestParentCustomElement(element.getRootNode().host, true);
   }
   return null;
 }

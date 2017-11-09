@@ -2,6 +2,8 @@ import { isCustomElement, getDeepestElementAtPoint, getClosestParentCustomElemen
   getComponentFilePath } from './custom-element';
 import { getDeepestCustomElementUnderMousePointer, listenToClickDisablingOthers } from './mouse';
 import { getOpenInEditorLink } from './open-in-editor';
+import { serializeElement } from './serializer';
+import { getShadowSelector, selectInShadow } from './shadow-dom';
 
 export {
   isCustomElement,
@@ -11,4 +13,7 @@ export {
   getDeepestCustomElementUnderMousePointer,
   listenToClickDisablingOthers,
   getOpenInEditorLink,
+  serializeElement,
+  getShadowSelector,
+  selectInShadow,
 };

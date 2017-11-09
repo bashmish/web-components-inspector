@@ -9,6 +9,7 @@ module.exports = {
       : config.dev.cssSourceMap,
     extract: false // disabled to have self-contained bundle
   }),
+  preserveWhitespace: false,
   transformToRequire: {
     video: 'src',
     source: 'src',

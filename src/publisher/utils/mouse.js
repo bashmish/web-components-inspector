@@ -2,7 +2,7 @@ import { getDeepestElementAtPoint, getClosestParentCustomElement } from './custo
 
 export function getDeepestCustomElementUnderMousePointer(event) {
   const elementUnderMouse = getDeepestElementAtPoint(event.clientX, event.clientY);
-  return getClosestParentCustomElement(elementUnderMouse);
+  return getClosestParentCustomElement(elementUnderMouse, true);
 }
 
 export function listenToClickDisablingOthers(element, onClick) {
