@@ -38,27 +38,12 @@ export function getComponentFilePath(element) {
 }
 
 function isPolymerComponent(element) {
-  const chain = getConstructorPrototypeChainTillHTMLElement(element);
-  const names = chain.map(prototype => prototype.name);
-  return names.includes('PolymerElement');
+  if (!window.Polymer || typeof window.Polymer.Element !== 'function') return false;
+  return element instanceof window.Polymer.Element;
 }
 
 function getPolymerFilePath(element) {
   const dir = element.importPath.replace(window.location.origin, '');
   const filename = `${element.tagName.toLowerCase()}.html`;
   return `${dir}${filename}`;
-}
-
-function getConstructorPrototypeChainTillHTMLElement(element) {
-  const chain = [];
-  let prototype = Object.getPrototypeOf(element.constructor);
-  while (prototype) {
-    if (prototype === HTMLElement) {
-      prototype = null;
-    } else {
-      chain.push(prototype);
-      prototype = Object.getPrototypeOf(prototype);
-    }
-  }
-  return chain;
 }
