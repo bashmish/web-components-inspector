@@ -15,9 +15,11 @@ export function initializeMethodsForMouseSelector(publisher) {
     document.removeEventListener('mousemove', onMousemove);
     if (undoListenToClickDisablingOthers) {
       undoListenToClickDisablingOthers();
+      undoListenToClickDisablingOthers = null;
     }
     if (removeHighlighter) {
       removeHighlighter();
+      removeHighlighter = null;
     }
     prevCustomElement = null;
   });
