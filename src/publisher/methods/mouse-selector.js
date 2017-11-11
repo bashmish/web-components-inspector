@@ -5,6 +5,7 @@ import { selectComponent } from './shared';
 export function initializeMethodsForMouseSelector(publisher) {
   let undoListenToClickDisablingOthers;
   let removeHighlighter;
+  let prevCustomElement;
 
   publisher.provide('startInspecting', () => {
     document.addEventListener('mousemove', onMousemove);
@@ -18,9 +19,9 @@ export function initializeMethodsForMouseSelector(publisher) {
     if (removeHighlighter) {
       removeHighlighter();
     }
+    prevCustomElement = null;
   });
 
-  let prevCustomElement;
   function onMousemove(event) {
     const customElement = getDeepestCustomElementUnderMousePointer(event);
 
