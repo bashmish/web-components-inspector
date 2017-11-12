@@ -3,9 +3,12 @@ export function isPolymerComponent(element) {
 }
 
 export function getPolymerFilePath(element) {
-  const dir = element.importPath.replace(window.location.origin, '');
-  const filename = `${element.tagName.toLowerCase()}.html`;
-  return `${dir}${filename}`;
+  if (element.importPath) {
+    const dir = element.importPath.replace(window.location.origin, '');
+    const filename = `${element.tagName.toLowerCase()}.html`;
+    return `${dir}${filename}`;
+  }
+  return null;
 }
 
 function isPolymer1Component(element) {

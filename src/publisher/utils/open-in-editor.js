@@ -5,8 +5,10 @@ const DEFAULT_OPEN_IN_EDITOR_PATH = 'http://127.0.0.1:9246/?file=';
 export function getOpenInEditorLink(element) {
   const openInEditorPath = getOpenInEditorPath();
   const componentPath = getComponentFilePath(element);
-  const openLink = `${openInEditorPath}${componentPath}`;
-  return openLink;
+  if (componentPath) {
+    return `${openInEditorPath}${componentPath}`;
+  }
+  return null;
 }
 
 function getOpenInEditorPath() {
