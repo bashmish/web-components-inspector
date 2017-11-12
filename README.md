@@ -16,6 +16,8 @@ Install [Rempl Chrome extension](https://chrome.google.com/webstore/detail/rempl
 1. npm install && npm start
 1. drag&drop "/src/publisher" to Chrome extensions
 
+Note: development environment would not work on HTTPS sites because inspector code is loaded from HTTP localhost. Build production dist if necessary.
+
 ## Usage
 
 1. open app with web components in Chrome
