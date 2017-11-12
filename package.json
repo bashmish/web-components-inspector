@@ -5,6 +5,7 @@
   "author": "Mikhail Bashkirov <bashmish@gmail.com>",
   "dependencies": {
     "html": "^1.0.0",
+    "popper.js": "^1.12.7",
     "rempl": "^1.0.0-alpha15",
     "vue": "^2.4.2"
   },
