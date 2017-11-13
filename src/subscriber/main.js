@@ -11,6 +11,8 @@ style.textContent = `
 body {
   margin: 0;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
