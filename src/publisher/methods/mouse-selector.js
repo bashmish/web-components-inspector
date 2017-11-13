@@ -1,10 +1,9 @@
 import { highlightElement } from '@/publisher/ui';
-import { getDeepestCustomElementUnderMousePointer, listenToClickDisablingOthers } from '@/publisher/utils';
+import { getDeepestCustomElementUnderMousePointer } from '@/publisher/utils';
 import { selectComponent } from './shared';
 
 export function initializeMethodsForMouseSelector(publisher) {
-  let undoListenToClickDisablingOthers;
-  let removeHighlighter;
+  let highlighter;
   let prevCustomElement;
 
   publisher.provide('startInspecting', () => {
@@ -13,38 +12,42 @@ export function initializeMethodsForMouseSelector(publisher) {
 
   publisher.provide('stopInspecting', () => {
     document.removeEventListener('mousemove', onMousemove);
-    if (undoListenToClickDisablingOthers) {
-      undoListenToClickDisablingOthers();
-      undoListenToClickDisablingOthers = null;
-    }
-    if (removeHighlighter) {
-      removeHighlighter();
-      removeHighlighter = null;
+    if (highlighter) {
+      highlighter.remove();
+      highlighter = null;
     }
     prevCustomElement = null;
   });
 
   function onMousemove(event) {
-    const customElement = getDeepestCustomElementUnderMousePointer(event);
+    const customElement = getCustomElementFromEvent(event);
 
     if (customElement && customElement !== prevCustomElement) {
       const name = customElement.tagName.toLowerCase();
       publisher.callRemote('hoverComponent', name);
 
-      if (undoListenToClickDisablingOthers) { undoListenToClickDisablingOthers(); }
-      undoListenToClickDisablingOthers = listenToClickDisablingOthers(event.target, onClick);
-
-      if (removeHighlighter) { removeHighlighter(); }
-      removeHighlighter = highlightElement(customElement);
+      if (highlighter) { highlighter.remove(); }
+      highlighter = highlightElement(customElement, onClick);
 
       prevCustomElement = customElement;
     }
   }
 
   function onClick(event) {
-    const element = getDeepestCustomElementUnderMousePointer(event);
-    if (element) {
-      selectComponent(publisher, element);
+    const customElement = getCustomElementFromEvent(event);
+    if (customElement) {
+      selectComponent(publisher, customElement);
     }
+  }
+
+  function getCustomElementFromEvent(event) {
+    if (highlighter) {
+      highlighter.deactivatePointerEvents();
+    }
+    const customElement = getDeepestCustomElementUnderMousePointer(event);
+    if (highlighter) {
+      highlighter.reactivatePointerEvents();
+    }
+    return customElement;
   }
 }

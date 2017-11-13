@@ -3,20 +3,21 @@ import Popper from 'popper.js';
 const overlayBgColor = 'rgba(0, 0, 0, 0.1)';
 const tooltipBgColor = '#252525';
 
-let removePreviousHighlighter;
+let highlighter = null;
 
-export function highlightElement(element) {
+export function highlightElement(element, onClick) {
   const rect = element.getBoundingClientRect();
-  if (removePreviousHighlighter) {
-    removePreviousHighlighter();
+  if (highlighter) {
+    highlighter.remove();
   }
-  removePreviousHighlighter = drawHighlighter(rect, element.tagName.toLowerCase());
-  return removePreviousHighlighter;
+  highlighter = createHighlighter(rect, element.tagName.toLowerCase(), onClick);
+  return highlighter;
 }
 
-function drawHighlighter(rect, name) {
+function createHighlighter(rect, name, onClick) {
   const overlay = createOverlay(rect);
   document.body.appendChild(overlay);
+  overlay.addEventListener('click', onClick);
 
   const tooltip = createTooltip();
   const arrow = createArrow();
@@ -27,11 +28,19 @@ function drawHighlighter(rect, name) {
 
   const popper = createPopper(overlay, tooltip, arrow);
 
-  return () => {
-    popper.destroy();
-    overlay.remove();
-    tooltip.remove();
-    removePreviousHighlighter = null;
+  return {
+    deactivatePointerEvents() {
+      overlay.style.pointerEvents = 'none';
+    },
+    reactivatePointerEvents() {
+      overlay.style.pointerEvents = 'auto';
+    },
+    remove() {
+      popper.destroy();
+      overlay.remove();
+      tooltip.remove();
+      highlighter = null;
+    },
   };
 }
 
@@ -45,7 +54,6 @@ function createOverlay(rect) {
   div.style.width = `${rect.width}px`;
   div.style.height = `${rect.height}px`;
   div.style.backgroundColor = overlayBgColor;
-  div.style.pointerEvents = 'none';
   return div;
 }
 
