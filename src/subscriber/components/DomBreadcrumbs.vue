@@ -23,8 +23,8 @@ export default {
       this.nodes = [];
       for (let i = selector.length; i >= 0; i -= 1) {
         const nodeSelector = selector.slice(0, selector.length - i);
-        this.api.callRemote('getNodeInfo', nodeSelector, (name) => {
-          this.nodes.push(name);
+        this.api.callRemote('getNodeInfo', nodeSelector, (node) => {
+          this.nodes.push(node);
         });
       }
     }, { immediate: true });
