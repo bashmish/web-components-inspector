@@ -1,6 +1,6 @@
 import { getComponentFilePath } from './custom-element';
 
-const DEFAULT_OPEN_IN_EDITOR_PATH = 'http://127.0.0.1:9246/?file=';
+const DEFAULT_OPEN_IN_EDITOR_PATH = 'http://127.0.0.1:6437/open-in-editor/?file=';
 
 export function getOpenInEditorLink(element) {
   const openInEditorPath = getOpenInEditorPath();

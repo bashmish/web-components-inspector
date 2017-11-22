@@ -1,0 +1,8 @@
+*
+
+!dist/publisher.js
+!dist/publisher.js.map
+!dist/subscriber.js
+!dist/subscriber.js.map
+!package.json
+!cli.js
