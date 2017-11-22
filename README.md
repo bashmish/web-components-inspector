@@ -1,24 +1,67 @@
-# Web Components inspector (supports Polymer)
+# Web Components Inspector (supports Polymer)
 
-## Install
+This tool gets inspiration from existing tools like [component-inspector](https://github.com/lahmatiy/component-inspector/) and similar ones for Vue ([vue-devtools](https://github.com/vuejs/vue-devtools)), React ([react-devtools](https://github.com/facebook/react-devtools)), Angular ([augury](https://github.com/rangle/augury)), etc... For now it is more a PoC that such a tool can be developed for Custom Elements and ShadowDOM (and friends) to provide a tree of Web Components with the ability to navigate between nodes. UX needs to be improved a lot, lots of features are still to be done, but in certain cases you can play and benefit from it right now. Stay tuned!
 
-### Prerequisites
-
-Install [Rempl Chrome extension](https://chrome.google.com/webstore/detail/rempl/hcikjlholajopgbgfmmlbmifdfbkijdj?hl=en) which is a platform that will host Web Components inspector in the Chrome DevTools panel. For more information about this platform visit [Rempl GitHub repository](https://github.com/rempl/rempl).
-
-### Production Mode
-
-1. npm install && npm run build
-1. drag&drop "/dist" to Chrome extensions
-
-### Development Mode
-
-1. npm install && npm start
-1. drag&drop "/src/publisher" to Chrome extensions
-
-Note: development environment would not work on HTTPS sites because inspector code is loaded from HTTP localhost. Build production dist if necessary.
+![Overview](./readme/overview.png)
 
 ## Usage
 
-1. open app with web components in Chrome
-1. open Chrome DevTools -> Rempl tab and use `Start Inspecting` button
+### Cross-browser
+
+1. Install CLI:
+
+    ```sh
+    npm install -g web-components-inspector
+    ```
+
+1. In terminal run CLI in you project root to start the server:
+
+    ```sh
+    cd path/to/my/project
+    wci         # run server on a default port 9247
+    wci -e code # with open-in-editor feature (VSCode)
+    wci --help  # look at all available options
+    ```
+
+1. Create "WCI" [bookmarklet](https://en.wikipedia.org/wiki/Bookmarklet) in your browser:
+
+    ```javascript
+    javascript:(function() {
+      var s = document.createElement('script');
+      s.src = 'http://127.0.0.1:9247/publisher.js';
+      s.onload = function() {
+        s.remove();
+        var m = document.createElement('meta');
+        m.name = 'wci:inpage-host';
+        document.head.appendChild(m);
+      };
+      document.head.appendChild(s);
+    })();
+    ```
+
+1. Open page with Web Components (for example [Shop app](https://github.com/Polymer/shop)) and click on the bookmarklet to load and activate the inspector.
+
+1. Start inspecting :telescope:
+
+![Cross-browser usage](./readme/usage-cross-browser.png)
+
+### Chrome Extension
+
+1. Install [Rempl extension](https://chrome.google.com/webstore/detail/rempl/hcikjlholajopgbgfmmlbmifdfbkijdj), a platform that will host Web Components Inspector in the Chrome DevTools panel. For more information about it visit [Rempl GitHub repository](https://github.com/rempl/rempl).
+
+1. Install [Web Components Inspector extension](https://chrome.google.com/webstore/detail/web-components-inspector/dhghhonjboahenmhpfdnmocbkijjcgdc).
+
+1. Open page with Web Components (for example [Shop app](https://github.com/Polymer/shop)) and activate DevTools => Rempl panel.
+
+1. To activate open-in-editor feature, you can either use the CLI (see cross-browser usage, steps 1-2) configuring the port to 6437 (`wci -p 6437 -e code`) which is expected by the extension, or better use a server specifically created for this feature:
+
+    ```sh
+    npm install -g open-in-editor-server
+    cd path/to/my/project
+    open-in-editor-serve -e code # run server on a default port 6437 and open files in VSCode
+    open-in-editor-serve --help  # look at all available options
+    ```
+
+1. Start inspecting :telescope:
+
+![Chrome extension usage](./readme/usage-chrome-extension.png)
