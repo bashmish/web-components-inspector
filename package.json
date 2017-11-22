@@ -78,7 +78,6 @@
     "node": ">= 6.3.0",
     "npm": ">= 5.0.0"
   },
-  "private": true,
   "scripts": {
     "build": "node build/build.js",
     "dev": "node build/dev-server.js",
