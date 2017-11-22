@@ -73,6 +73,12 @@ var webpackConfig = merge(baseWebpackConfig, {
     ]),
     new CopyWebpackPlugin([
       {
+        from: path.resolve(__dirname, '../src/publisher/icon128.png'),
+        to: config.build.assetsSubDirectory,
+      }
+    ]),
+    new CopyWebpackPlugin([
+      {
         from: path.resolve(__dirname, '../src/publisher/page-injector.js'),
         to: config.build.assetsSubDirectory,
         transform: function(buffer) {
