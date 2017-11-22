@@ -1,5 +1,6 @@
 *
-
+!README.md
+!readme/*
 !dist/publisher.js
 !dist/publisher.js.map
 !dist/subscriber.js
