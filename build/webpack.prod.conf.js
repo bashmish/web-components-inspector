@@ -85,7 +85,7 @@ var webpackConfig = merge(baseWebpackConfig, {
           `;
           const content = buffer.toString();
           return content.replace('/* REMPL_SUBSCRIBER_URL placeholder */', subscribeUrlScript)
-                        .replace(`'http://localhost:8080/publisher.js'`, `chrome.extension.getURL('publisher.js')`);
+                        .replace(`'http://127.0.0.1:8080/publisher.js'`, `chrome.extension.getURL('publisher.js')`);
         },
       }
     ]),
