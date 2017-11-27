@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Web Components Inspector",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Web Components Inspector Chrome extension (supports Polymer)",
   "icons": {
     "128": "icon128.png"
