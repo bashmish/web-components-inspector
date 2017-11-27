@@ -53,12 +53,12 @@ This tool gets inspiration from existing tools like [component-inspector](https:
 
 1. Open page with Web Components (for example [Shop app](https://github.com/Polymer/shop)) and activate DevTools => Rempl panel.
 
-1. To activate open-in-editor feature, you can either use the CLI (see cross-browser usage, steps 1-2) configuring the port to 6437 (`wci -p 6437 -e code`) which is expected by the extension, or better use a server specifically created for this feature:
+1. To activate open-in-editor feature, you still need to run a server. You can either use the CLI (see cross-browser usage, steps 1-2), or use a server specifically created for this feature (on port 9247 which the extension expects):
 
     ```sh
     npm install -g open-in-editor-server
     cd path/to/my/project
-    open-in-editor-serve -e code # run server on a default port 6437 and open files in VSCode
+    open-in-editor-serve -e code -p 9247 # run server on a port 9247 and open files in VSCode
     open-in-editor-serve --help  # look at all available options
     ```
 

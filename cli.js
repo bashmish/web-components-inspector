@@ -52,7 +52,7 @@ bookmarkletFiles.forEach((filename) => {
           `http://127.0.0.1:${argv.port}/subscriber.js`,
         )
         .replace(
-          'http://127.0.0.1:6437/open-in-editor/',
+          'http://127.0.0.1:9247/open-in-editor/',
           `http://127.0.0.1:${argv.port}/open-in-editor/`,
         );
     }
